@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jacaudi/tempest_influx/internal/config"
-	"github.com/jacaudi/tempest_influx/internal/logger"
+	"tempest_influx/internal/config"
+	"tempest_influx/internal/logger"
 )
 
 // Mock UDP connection for testing

@@ -10,9 +10,9 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/jacaudi/tempest_influx/internal/config"
-	"github.com/jacaudi/tempest_influx/internal/logger"
-	"github.com/jacaudi/tempest_influx/internal/processor"
+	"tempest_influx/internal/config"
+	"tempest_influx/internal/logger"
+	"tempest_influx/internal/processor"
 )
 
 func main() {
