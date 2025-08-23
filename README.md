@@ -4,6 +4,8 @@ A high-performance weather data collector that receives UDP broadcasts from Weat
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/jacaudi/tempest-influxdb?style=flat-square)](https://goreportcard.com/report/github.com/jacaudi/tempest-influxdb)
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/jacaudi/tempest-influxdb)
+[![Latest Release](https://img.shields.io/github/v/release/jacaudi/tempest-influxdb?style=flat-square)](https://github.com/jacaudi/tempest-influxdb/releases)
+[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg?style=flat-square)](https://renovatebot.com/)
 
 ## Features
 
