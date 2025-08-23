@@ -17,12 +17,15 @@ type Config struct {
 	Config_Dir               string `mapstructure:"CONFIG_DIR"`
 	Listen_Address           string `mapstructure:"LISTEN_ADDRESS"`
 	Influx_URL               string `mapstructure:"INFLUX_URL"`
+	Influx_API_Path          string `mapstructure:"INFLUX_API_PATH"`
+	Influx_Org               string `mapstructure:"INFLUX_ORG"`
 	Influx_Token             string `mapstructure:"INFLUX_TOKEN"`
 	Influx_Bucket            string `mapstructure:"INFLUX_BUCKET"`
 	Influx_Bucket_Rapid_Wind string `mapstructure:"INFLUX_BUCKET_RAPID_WIND"`
 	Buffer                   int
 	Verbose                  bool
 	Debug                    bool
+	Raw_UDP                  bool `mapstructure:"RAW_UDP"`
 	Noop                     bool
 	Rapid_Wind               bool `mapstructure:"RAPID_WIND"`
 }
@@ -30,7 +33,8 @@ type Config struct {
 // Default configuration values
 const (
 	DefaultListenAddress = ":50222"
-	DefaultInfluxURL     = "https://localhost:8086/api/v2/write"
+	DefaultInfluxURL     = "https://localhost:8086"
+	DefaultInfluxAPIPath = "/api/v2/write"
 	DefaultBuffer        = 10240
 	DefaultTimeout       = 10 // seconds
 
@@ -47,6 +51,10 @@ func (c *Config) Validate() error {
 	// Validate required fields
 	if c.Influx_URL == "" {
 		validationErrors = append(validationErrors, "INFLUX_URL is required")
+	}
+
+	if c.Influx_Org == "" {
+		validationErrors = append(validationErrors, "INFLUX_ORG is required")
 	}
 
 	if c.Influx_Token == "" {
@@ -90,16 +98,20 @@ func Load(path string, name string) *Config {
 	// Set defaults
 	viper.SetDefault("Listen_Address", DefaultListenAddress)
 	viper.SetDefault("Influx_URL", DefaultInfluxURL)
+	viper.SetDefault("Influx_API_Path", DefaultInfluxAPIPath)
 	viper.SetDefault("Buffer", DefaultBuffer)
 
 	flag.String("listen_address", "", "Address to listen for UDP Broadcasts")
-	flag.String("influx_url", "", "URL to receive influx metrics")
+	flag.String("influx_url", "", "InfluxDB base URL (without /api/v2/write)")
+	flag.String("influx_api_path", "", "InfluxDB API path (default: /api/v2/write)")
+	flag.String("influx_org", "", "InfluxDB organization name")
 	flag.String("influx_token", "", "Authentication token for Influx")
 	flag.String("influx_bucket", "", "InfluxDB bucket name")
 	flag.String("influx_bucket_rapid_wind", "", "InfluxDB bucket name for rapid wind reports")
 	flag.Int("buffer", 0, "Max buffer size for the socket io")
 	flag.BoolP("verbose", "v", false, "Verbose logging")
 	flag.BoolP("debug", "d", false, "Debug logging")
+	flag.Bool("raw_udp", false, "Show raw UDP packet data in hex format")
 	flag.BoolP("noop", "n", false, "Don't post to influx")
 	flag.Bool("rapid_wind", false, "Send rapid wind reports")
 

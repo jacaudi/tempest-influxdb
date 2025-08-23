@@ -47,6 +47,8 @@ func main() {
 		appLogger.Debug("Configuration loaded",
 			slog.String("listen_address", cfg.Listen_Address),
 			slog.String("influx_url", cfg.Influx_URL),
+			slog.String("influx_api_path", cfg.Influx_API_Path),
+			slog.String("influx_org", cfg.Influx_Org),
 			slog.String("influx_bucket", cfg.Influx_Bucket),
 			slog.Bool("rapid_wind", cfg.Rapid_Wind))
 	}
@@ -56,6 +58,8 @@ func main() {
 		slog.Bool("debug", cfg.Debug),
 		slog.String("listen_address", cfg.Listen_Address),
 		slog.String("influx_url", cfg.Influx_URL),
+		slog.String("influx_api_path", cfg.Influx_API_Path),
+		slog.String("influx_org", cfg.Influx_Org),
 		slog.String("bucket", cfg.Influx_Bucket),
 		slog.Bool("rapid_wind", cfg.Rapid_Wind),
 		slog.String("rapid_wind_bucket", cfg.Influx_Bucket_Rapid_Wind))

@@ -14,11 +14,13 @@ func TestConfigValidation(t *testing.T) {
 		{
 			name: "valid config",
 			config: &Config{
-				Influx_URL:     "http://localhost:8086/api/v2/write",
-				Influx_Token:   "test-token",
-				Influx_Bucket:  "test-bucket",
-				Listen_Address: ":50222",
-				Buffer:         1024,
+				Influx_URL:      "http://localhost:8086",
+				Influx_API_Path: "/api/v2/write",
+				Influx_Org:      "test-org",
+				Influx_Token:    "test-token",
+				Influx_Bucket:   "test-bucket",
+				Listen_Address:  ":50222",
+				Buffer:          1024,
 			},
 			wantErr: false,
 		},

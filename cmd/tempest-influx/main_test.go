@@ -85,11 +85,13 @@ func TestMainComponents(t *testing.T) {
 	// Test the individual components that main uses
 	t.Run("config validation", func(t *testing.T) {
 		cfg := &config.Config{
-			Influx_URL:     "http://localhost:8086/api/v2/write",
-			Influx_Token:   "test-token",
-			Influx_Bucket:  "test-bucket",
-			Listen_Address: ":50222",
-			Buffer:         1024,
+			Influx_URL:      "http://localhost:8086",
+			Influx_API_Path: "/api/v2/write",
+			Influx_Org:      "test-org",
+			Influx_Token:    "test-token",
+			Influx_Bucket:   "test-bucket",
+			Listen_Address:  ":50222",
+			Buffer:          1024,
 		}
 
 		err := cfg.Validate()

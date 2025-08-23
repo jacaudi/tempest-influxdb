@@ -81,7 +81,7 @@ func processPacket(ctx context.Context, cfg *config.Config, logger *logger.AppLo
 	}
 
 	if m.Bucket != "" {
-		// Set query arguments
+		// Set query arguments, preserving existing parameters like org
 		query := influxURL.Query()
 		query.Set("bucket", m.Bucket)
 		influxURL.RawQuery = query.Encode()
@@ -96,6 +96,8 @@ func processPacket(ctx context.Context, cfg *config.Config, logger *logger.AppLo
 		return
 	}
 	request.Header.Set("Authorization", "Token "+cfg.Influx_Token)
+	request.Header.Set("Content-Type", "text/plain; charset=utf-8")
+	request.Header.Set("Accept", "application/json")
 
 	if cfg.Noop {
 		logger.Info("NOOP mode - not posting to InfluxDB",
@@ -163,14 +165,15 @@ func (ws *WeatherService) Start(ctx context.Context) error {
 
 	defer ws.listener.Close()
 
-	// Parse Influx URL
-	influxURL, err := url.Parse(ws.config.Influx_URL)
+	// Parse Influx URL and append API path
+	influxURL, err := url.Parse(ws.config.Influx_URL + ws.config.Influx_API_Path)
 	if err != nil {
 		return err
 	}
 
 	// Set query arguments
 	query := influxURL.Query()
+	query.Set("org", ws.config.Influx_Org)
 	query.Set("precision", "s")
 	influxURL.RawQuery = query.Encode()
 
@@ -204,8 +207,12 @@ func (ws *WeatherService) Start(ctx context.Context) error {
 					"remote_addr", udpAddr.String(),
 					"bytes", n,
 					"data", string(b[:n]))
+			}
+
+			if ws.config.Raw_UDP {
+				udpAddr, _ := addr.(*net.UDPAddr)
 				// Print raw bytes in hex format for tcpdump-like output
-				fmt.Printf("DEBUG RAW: %d bytes from %s: %x\n", n, udpAddr.String(), b[:n])
+				fmt.Printf("RAW UDP: %d bytes from %s: %x\n", n, udpAddr.String(), b[:n])
 			}
 
 			// Process packet in goroutine with context
