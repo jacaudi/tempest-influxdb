@@ -10,7 +10,6 @@ import (
 	"net"
 
 	"github.com/de-wax/go-pkg/dewpoint"
-
 	"github.com/jacaudi/tempest-influxdb/internal/config"
 	"github.com/jacaudi/tempest-influxdb/internal/influx"
 )

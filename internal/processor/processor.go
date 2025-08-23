@@ -9,12 +9,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/samber/lo"
-
 	"github.com/jacaudi/tempest-influxdb/internal/config"
 	"github.com/jacaudi/tempest-influxdb/internal/influx"
 	"github.com/jacaudi/tempest-influxdb/internal/logger"
 	"github.com/jacaudi/tempest-influxdb/internal/tempest"
+	"github.com/samber/lo"
 )
 
 // Buffer pool for reusing byte buffers to reduce GC pressure

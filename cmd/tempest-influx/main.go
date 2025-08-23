@@ -8,11 +8,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/samber/lo"
-
 	"github.com/jacaudi/tempest-influxdb/internal/config"
 	"github.com/jacaudi/tempest-influxdb/internal/logger"
 	"github.com/jacaudi/tempest-influxdb/internal/processor"
+	"github.com/samber/lo"
 )
 
 func main() {
