@@ -100,6 +100,21 @@ InfluxDB via the influxdb_v2_listener, for example:
 
 Core UDP packet processing code based on code in [udpproxy](https://github.com/Akagi201/udpproxy)
 
+## Development
+
+This project uses a local module name (`tempest_influx`) for development. When ready to publish as a Go module, update the `go.mod` file to use the full GitHub path:
+
+```bash
+# Update module name in go.mod
+sed -i 's/module tempest_influx/module github.com\/jacaudi\/tempest_influx/' go.mod
+
+# Update import statements in all Go files
+find . -name "*.go" -exec sed -i 's|tempest_influx/internal/|github.com/jacaudi/tempest_influx/internal/|g' {} +
+
+# Clean up dependencies
+go mod tidy
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
