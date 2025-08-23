@@ -1,21 +1,23 @@
-# tempest_influx
+# Tempest InfluxDB Collector
 
-Go program to convert WeatherFlow Tempest WX UDP broadcasts to influx
-wire protocol.
+A high-performance weather data collector that receives UDP broadcasts from WeatherFlow Tempest weather stations and forwards the data to InfluxDB for storage and analysis.
 
-The [Tempest Weather
-System](https://shop.weatherflow.com/products/tempest) sends UDP
-broadcasts with weather data and system status periodically.
-This program receives those broadcasts and generates InfluxDB wire
-protocol messages to import the data into InfluxDB.
+[![Go Report Card](https://goreportcard.com/badge/github.com/yourusername/tempest_influx?style=flat-square)](https://goreportcard.com/report/github.com/yourusername/tempest_influx)
+[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/yourusername/tempest_influx)
 
-This program will forward selected data to
-[InfluxDB](https://www.influxdata.com/) or a
-[Telegraf](https://www.influxdata.com/time-series-platform/telegraf/)
-proxy.
+## Features
 
-Docker host networking is required to receive the UDP broadcasts,
-unless some type of proxy is used.
+- **UDP Listener**: Receives real-time weather data broadcasts from Tempest stations
+- **InfluxDB Integration**: Converts and forwards data using InfluxDB line protocol
+- **Structured Logging**: Uses Go's structured logging with configurable levels
+- **Performance Optimized**: Includes buffer pooling, optimized HTTP client, and efficient data parsing
+- **Configuration Flexible**: Supports YAML files, environment variables, and command-line flags
+- **Rapid Wind Support**: Optional high-frequency wind data collection
+- **Graceful Shutdown**: Proper signal handling for clean service termination
+
+The [Tempest Weather System](https://shop.weatherflow.com/products/tempest) sends UDP broadcasts with weather data and system status periodically. This program receives those broadcasts and generates InfluxDB wire protocol messages to import the data into InfluxDB.
+
+Docker host networking is required to receive the UDP broadcasts, unless some type of proxy is used.
 
 ## Tempest WX Broadcast Formats
 
@@ -97,3 +99,7 @@ InfluxDB via the influxdb_v2_listener, for example:
 ## Credits
 
 Core UDP packet processing code based on code in [udpproxy](https://github.com/Akagi201/udpproxy)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
