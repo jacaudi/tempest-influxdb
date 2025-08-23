@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/de-wax/go-pkg/dewpoint v0.0.0-20220101175539-95c0f6ea9470
 	github.com/samber/lo v1.51.0
-	github.com/spf13/pflag v1.0.5
+	github.com/spf13/pflag v1.0.7
 	github.com/spf13/viper v1.10.1
 )
 
