@@ -2,6 +2,7 @@ package processor
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"net/http"
 	"net/url"
@@ -203,6 +204,8 @@ func (ws *WeatherService) Start(ctx context.Context) error {
 					"remote_addr", udpAddr.String(),
 					"bytes", n,
 					"data", string(b[:n]))
+				// Print raw bytes in hex format for tcpdump-like output
+				fmt.Printf("DEBUG RAW: %d bytes from %s: %x\n", n, udpAddr.String(), b[:n])
 			}
 
 			// Process packet in goroutine with context
