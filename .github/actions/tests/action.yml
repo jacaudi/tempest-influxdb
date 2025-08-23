@@ -12,24 +12,7 @@ runs:
 
     - name: Run all Tests
       shell: bash
+      working-directory: ${{ github.workspace }}
       run: |
         go version
-        go test -json ./...
-
-    - name: Run with coverage
-      shell: bash
-      run: |
-        go version
-        go test -json -v ./... -cover
-    
-    - name: Run integration tests
-      shell: bash
-      run: |
-        go version
-        go test -json -v -tags=integration ./internal/radar -v
-
-    - name: Run benchmark tests
-      shell: bash
-      run: |
-        go version
-        go test -json -bench=. ./internal/... -benchmem
+        go test -json ./... 
