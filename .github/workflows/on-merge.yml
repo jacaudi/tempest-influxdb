@@ -10,11 +10,20 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-go@v4
         with:
-          go-version: ">=1.20"
+          go-version: "1.21"
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
 
       - name: Prepare modules
         run: |
@@ -22,7 +31,19 @@ jobs:
           go mod tidy
 
       - name: Run tests
-        run: go test -json ./...
+        run: |
+          go test -v -coverprofile=coverage.out ./... | tee test-results.txt
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results.txt
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage.out
 
   release-image:
     runs-on: ubuntu-latest
@@ -38,3 +59,5 @@ jobs:
           latest: true
           push: true
           tag-strategy: "latest"
+        # Ensure context is correct for composite action
+        # If build fails, check working-directory or context in action.yml
