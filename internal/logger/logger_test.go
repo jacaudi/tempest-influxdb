@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/anon/tempest_influx/internal/config"
+	"github.com/jacaudi/tempest_influx/internal/config"
 )
 
 func TestNewLogger(t *testing.T) {
@@ -31,7 +31,7 @@ func TestNewLogger(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			logger := New(tt.config)
-			
+
 			if logger == nil {
 				t.Fatal("New() returned nil logger")
 			}
@@ -42,7 +42,7 @@ func TestNewLogger(t *testing.T) {
 
 			// Test that the logger is working by capturing output
 			var buf bytes.Buffer
-			
+
 			// Create a new logger with a custom handler for testing
 			handler := slog.NewTextHandler(&buf, &slog.HandlerOptions{
 				Level: tt.want,
@@ -76,7 +76,7 @@ func TestNewLogger(t *testing.T) {
 }
 
 func TestNewLoggerJSONHandler(t *testing.T) {
-	
+
 	// Capture the output from the logger
 	var buf bytes.Buffer
 	handler := slog.NewJSONHandler(&buf, &slog.HandlerOptions{
@@ -87,7 +87,7 @@ func TestNewLoggerJSONHandler(t *testing.T) {
 	logger.Info("test json message", "key", "value", "number", 42)
 
 	output := buf.String()
-	
+
 	// Verify it's valid JSON
 	var jsonData map[string]any
 	if err := json.Unmarshal([]byte(output), &jsonData); err != nil {
@@ -119,7 +119,7 @@ func TestNewLoggerTextHandler(t *testing.T) {
 	logger.Debug("test text message", "key", "value")
 
 	output := buf.String()
-	
+
 	// Verify it contains expected text format elements
 	if !strings.Contains(output, "test text message") {
 		t.Error("Message not found in text output")
@@ -139,7 +139,7 @@ func TestLoggerMethods(t *testing.T) {
 
 	// Test all log levels
 	logger.Debug("debug message", "level", "debug")
-	logger.Info("info message", "level", "info") 
+	logger.Info("info message", "level", "info")
 	logger.Warn("warn message", "level", "warn")
 	logger.Error("error message", "level", "error")
 
@@ -148,7 +148,7 @@ func TestLoggerMethods(t *testing.T) {
 	expectedMessages := []string{
 		"debug message",
 		"info message",
-		"warn message", 
+		"warn message",
 		"error message",
 	}
 
@@ -174,7 +174,7 @@ func TestLoggerWithStructuredFields(t *testing.T) {
 	)
 
 	output := buf.String()
-	
+
 	var jsonData map[string]any
 	if err := json.Unmarshal([]byte(output), &jsonData); err != nil {
 		t.Fatalf("Output is not valid JSON: %v", err)

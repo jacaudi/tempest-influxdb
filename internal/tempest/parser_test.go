@@ -5,8 +5,8 @@ import (
 	"net"
 	"testing"
 
-	"github.com/anon/tempest_influx/internal/config"
-	"github.com/anon/tempest_influx/internal/influx"
+	"github.com/jacaudi/tempest_influx/internal/config"
+	"github.com/jacaudi/tempest_influx/internal/influx"
 )
 
 func TestPrecipType_String(t *testing.T) {
@@ -155,7 +155,7 @@ func TestParseRapidWindSuccess(t *testing.T) {
 
 func TestParseRapidWindInsufficientData(t *testing.T) {
 	// This test requires directly accessing the parser with a Report that has
-	// insufficient data. Since Ob is a fixed-size array [3]float64, 
+	// insufficient data. Since Ob is a fixed-size array [3]float64,
 	// we need to simulate insufficient data differently.
 	// For now, we'll test that the parser correctly processes valid data
 	// and skip the insufficient data test case since the struct itself
@@ -179,7 +179,7 @@ func TestParseValidObsStReport(t *testing.T) {
 	}`
 
 	addr, _ := net.ResolveUDPAddr("udp", "192.168.1.100:50222")
-	
+
 	m, err := Parse(cfg, addr, []byte(jsonData), len(jsonData))
 
 	if err != nil {
@@ -205,9 +205,9 @@ func TestParseValidObsStReport(t *testing.T) {
 
 func TestParseValidRapidWindReport(t *testing.T) {
 	cfg := &config.Config{
-		Debug:         false,
-		Rapid_Wind:    true,
-		Influx_Bucket: "test-bucket",
+		Debug:                    false,
+		Rapid_Wind:               true,
+		Influx_Bucket:            "test-bucket",
 		Influx_Bucket_Rapid_Wind: "rapid-wind-bucket",
 	}
 
@@ -218,7 +218,7 @@ func TestParseValidRapidWindReport(t *testing.T) {
 	}`
 
 	addr, _ := net.ResolveUDPAddr("udp", "192.168.1.100:50222")
-	
+
 	m, err := Parse(cfg, addr, []byte(jsonData), len(jsonData))
 
 	if err != nil {
@@ -252,7 +252,7 @@ func TestParseRapidWindDisabled(t *testing.T) {
 	}`
 
 	addr, _ := net.ResolveUDPAddr("udp", "192.168.1.100:50222")
-	
+
 	m, err := Parse(cfg, addr, []byte(jsonData), len(jsonData))
 
 	if err != nil {
@@ -273,7 +273,7 @@ func TestParseIgnoredReportTypes(t *testing.T) {
 	for _, reportType := range ignoredTypes {
 		t.Run(reportType, func(t *testing.T) {
 			jsonData := `{"type": "` + reportType + `"}`
-			
+
 			m, err := Parse(cfg, addr, []byte(jsonData), len(jsonData))
 
 			if err != nil {
@@ -290,9 +290,9 @@ func TestParseIgnoredReportTypes(t *testing.T) {
 func TestParseInvalidJSON(t *testing.T) {
 	cfg := &config.Config{Debug: false}
 	addr, _ := net.ResolveUDPAddr("udp", "192.168.1.100:50222")
-	
+
 	invalidJSON := `{"type": "obs_st", "obs": [invalid json}`
-	
+
 	m, err := Parse(cfg, addr, []byte(invalidJSON), len(invalidJSON))
 
 	if err == nil {
@@ -307,9 +307,9 @@ func TestParseInvalidJSON(t *testing.T) {
 func TestParseUnknownReportType(t *testing.T) {
 	cfg := &config.Config{Debug: false, Influx_Bucket: "test-bucket"}
 	addr, _ := net.ResolveUDPAddr("udp", "192.168.1.100:50222")
-	
+
 	jsonData := `{"type": "unknown_type"}`
-	
+
 	m, err := Parse(cfg, addr, []byte(jsonData), len(jsonData))
 
 	if err != nil {
@@ -325,7 +325,7 @@ func TestParseUnknownReportType(t *testing.T) {
 func BenchmarkParseObsStReport(b *testing.B) {
 	cfg := &config.Config{Debug: false, Influx_Bucket: "test-bucket"}
 	addr, _ := net.ResolveUDPAddr("udp", "192.168.1.100:50222")
-	
+
 	jsonData := `{
 		"serial_number": "ST-123456",
 		"type": "obs_st",
@@ -344,7 +344,7 @@ func BenchmarkParseObsStReport(b *testing.B) {
 func BenchmarkParseRapidWindReport(b *testing.B) {
 	cfg := &config.Config{Debug: false, Rapid_Wind: true, Influx_Bucket: "test-bucket"}
 	addr, _ := net.ResolveUDPAddr("udp", "192.168.1.100:50222")
-	
+
 	jsonData := `{
 		"serial_number": "ST-123456",
 		"type": "rapid_wind",

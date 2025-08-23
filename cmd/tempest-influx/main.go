@@ -9,10 +9,10 @@ import (
 	"syscall"
 
 	"github.com/samber/lo"
-	
-	"github.com/anon/tempest_influx/internal/config"
-	"github.com/anon/tempest_influx/internal/logger"
-	"github.com/anon/tempest_influx/internal/processor"
+
+	"github.com/jacaudi/tempest_influx/internal/config"
+	"github.com/jacaudi/tempest_influx/internal/logger"
+	"github.com/jacaudi/tempest_influx/internal/processor"
 )
 
 func main() {

@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/anon/tempest_influx/internal/config"
-	"github.com/anon/tempest_influx/internal/logger"
+	"github.com/jacaudi/tempest_influx/internal/config"
+	"github.com/jacaudi/tempest_influx/internal/logger"
 )
 
 // Mock UDP connection for testing
@@ -44,7 +44,7 @@ func (m *mockUDPConn) addPacket(data []byte, addr *net.UDPAddr, err error) {
 func (m *mockUDPConn) ReadFrom(b []byte) (n int, addr net.Addr, err error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	
+
 	if m.index >= len(m.data) {
 		// Return timeout to allow context checking
 		return 0, nil, &net.OpError{Op: "read", Net: "udp", Err: timeoutError{}}
@@ -107,9 +107,9 @@ func (m *mockHTTPClient) addResponse(resp *http.Response, err error) {
 func (m *mockHTTPClient) Do(req *http.Request) (*http.Response, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	
+
 	m.requests = append(m.requests, req)
-	
+
 	if m.index >= len(m.responses) {
 		return nil, errors.New("no more responses")
 	}
@@ -129,7 +129,7 @@ func TestCreateOptimizedHTTPClient(t *testing.T) {
 	}
 
 	if client.Timeout != time.Duration(config.DefaultTimeout)*time.Second {
-		t.Errorf("Expected timeout %v, got %v", 
+		t.Errorf("Expected timeout %v, got %v",
 			time.Duration(config.DefaultTimeout)*time.Second, client.Timeout)
 	}
 
@@ -139,17 +139,17 @@ func TestCreateOptimizedHTTPClient(t *testing.T) {
 	}
 
 	if transport.MaxIdleConns != config.HTTPMaxIdleConns {
-		t.Errorf("Expected MaxIdleConns %d, got %d", 
+		t.Errorf("Expected MaxIdleConns %d, got %d",
 			config.HTTPMaxIdleConns, transport.MaxIdleConns)
 	}
 
 	if transport.MaxConnsPerHost != config.HTTPMaxConnsPerHost {
-		t.Errorf("Expected MaxConnsPerHost %d, got %d", 
+		t.Errorf("Expected MaxConnsPerHost %d, got %d",
 			config.HTTPMaxConnsPerHost, transport.MaxConnsPerHost)
 	}
 
 	if transport.ExpectContinueTimeout != 0 {
-		t.Errorf("Expected ExpectContinueTimeout 0, got %v", 
+		t.Errorf("Expected ExpectContinueTimeout 0, got %v",
 			transport.ExpectContinueTimeout)
 	}
 }
@@ -215,7 +215,7 @@ func TestProcessPacketValidData(t *testing.T) {
 		}
 
 		if r.Header.Get("Authorization") != "Token test-token" {
-			t.Errorf("Expected Authorization header 'Token test-token', got %s", 
+			t.Errorf("Expected Authorization header 'Token test-token', got %s",
 				r.Header.Get("Authorization"))
 		}
 
@@ -295,7 +295,7 @@ func TestWeatherServiceContextCancellation(t *testing.T) {
 
 	// Create a context that will be cancelled quickly
 	ctx, cancel := context.WithCancel(context.Background())
-	
+
 	// Start the service in a goroutine
 	errChan := make(chan error, 1)
 	go func() {

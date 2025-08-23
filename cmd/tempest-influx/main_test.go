@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/anon/tempest_influx/internal/config"
+	"github.com/jacaudi/tempest_influx/internal/config"
 )
 
 func TestMainFunctionality(t *testing.T) {
@@ -45,7 +45,7 @@ func TestSignalHandling(t *testing.T) {
 	// Test that signal handling works correctly
 	// Create signal channel like in main
 	sigCh := make(chan os.Signal, 1)
-	
+
 	// Test that we can send a signal
 	go func() {
 		time.Sleep(10 * time.Millisecond)
@@ -72,7 +72,7 @@ func TestEnvironmentVariableHandling(t *testing.T) {
 	}{
 		{
 			name:     "config dir override",
-			envVar:   "TEMPEST_INFLUX_CONFIG_DIR", 
+			envVar:   "TEMPEST_INFLUX_CONFIG_DIR",
 			envValue: "/custom/config",
 			expected: "/custom/config",
 		},
@@ -88,7 +88,7 @@ func TestEnvironmentVariableHandling(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Clear environment variable
 			os.Unsetenv(tt.envVar)
-			
+
 			if tt.envValue != "" {
 				os.Setenv(tt.envVar, tt.envValue)
 				defer os.Unsetenv(tt.envVar)
@@ -146,7 +146,7 @@ func TestMainComponents(t *testing.T) {
 func TestVersionOutput(t *testing.T) {
 	// Test that version string is properly formatted
 	version := "2.0.0"
-	
+
 	if !strings.Contains(version, "2.0.0") {
 		t.Errorf("Version string should contain '2.0.0', got %s", version)
 	}
@@ -155,7 +155,7 @@ func TestVersionOutput(t *testing.T) {
 func TestLogPrefixSetting(t *testing.T) {
 	// Test that log prefix can be set (simulating what happens in main)
 	expectedPrefix := "tempest_influx: "
-	
+
 	// We can't easily test the actual log.SetPrefix call,
 	// but we can verify the string is correct
 	if !strings.HasSuffix(expectedPrefix, ": ") {
@@ -171,7 +171,7 @@ func TestLogPrefixSetting(t *testing.T) {
 func TestMainIntegration(t *testing.T) {
 	// Skip this test due to flag redefinition issues when config.Load is called multiple times in tests
 	t.Skip("Skipping integration test due to global flag conflicts")
-	
+
 	// Skip this test in short mode
 	if testing.Short() {
 		t.Skip("Skipping integration test in short mode")

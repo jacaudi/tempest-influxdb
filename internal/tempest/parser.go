@@ -11,8 +11,8 @@ import (
 
 	"github.com/de-wax/go-pkg/dewpoint"
 
-	"github.com/anon/tempest_influx/internal/config"
-	"github.com/anon/tempest_influx/internal/influx"
+	"github.com/jacaudi/tempest_influx/internal/config"
+	"github.com/jacaudi/tempest_influx/internal/influx"
 )
 
 // Error constants for better error handling
@@ -93,7 +93,7 @@ func parseObservation(cfg *config.Config, report Report, m *influx.Data) error {
 	if len(report.Obs[0]) < 18 {
 		return fmt.Errorf("%w: expected 18 fields, got %d", ErrInsufficientData, len(report.Obs[0]))
 	}
-	
+
 	data := report.Obs[0]
 	observation.Timestamp = int64(data[0])
 	observation.WindLull = data[1]
@@ -158,7 +158,7 @@ func parseRapidWind(cfg *config.Config, report Report, m *influx.Data) error {
 	if len(report.Ob) < 3 {
 		return fmt.Errorf("%w: expected 3 fields, got %d", ErrInsufficientData, len(report.Ob))
 	}
-	
+
 	rapidWind.Timestamp = int64(report.Ob[0])
 	rapidWind.WindSpeed = report.Ob[1]
 	rapidWind.WindDirection = int(math.Round(report.Ob[2]))
