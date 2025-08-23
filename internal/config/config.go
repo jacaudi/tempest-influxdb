@@ -131,6 +131,8 @@ func Load(path string, name string) *Config {
 		log.Fatalf("Failed to unmarshal config: %v", err)
 	}
 
+	// Debug print to help diagnose missing env vars
+	fmt.Printf("DEBUG: INFLUX_TOKEN=\"%s\" INFLUX_BUCKET=\"%s\"\n", config.Influx_Token, config.Influx_Bucket)
 	// Validate configuration using Lo library patterns
 	lo.Must0(config.Validate())
 
