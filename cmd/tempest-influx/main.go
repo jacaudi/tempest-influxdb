@@ -10,13 +10,13 @@ import (
 
 	"github.com/samber/lo"
 
-	"tempest_influx/internal/config"
-	"tempest_influx/internal/logger"
-	"tempest_influx/internal/processor"
+	"tempest-influxdb/internal/config"
+	"tempest-influxdb/internal/logger"
+	"tempest-influxdb/internal/processor"
 )
 
 func main() {
-	log.SetPrefix("tempest_influx: ")
+	log.SetPrefix("tempest-influxdb: ")
 
 	// Create context for graceful shutdown
 	ctx, cancel := context.WithCancel(context.Background())
@@ -29,7 +29,7 @@ func main() {
 	// Check for config path override using Lo library patterns
 	configDir := lo.CoalesceOrEmpty(os.Getenv("TEMPEST_INFLUX_CONFIG_DIR"), "/config")
 
-	cfg := config.Load(configDir, "tempest_influx")
+	cfg := config.Load(configDir, "tempest-influxdb")
 
 	// Initialize structured logger
 	appLogger := logger.New(cfg)
@@ -40,7 +40,7 @@ func main() {
 		cancel()
 	}()
 
-	appLogger.Info("Starting tempest_influx",
+	appLogger.Info("Starting tempest-influxdb",
 		slog.String("config_dir", configDir),
 		slog.String("version", "2.0.0"))
 

@@ -153,7 +153,7 @@ tasks:
     deps: [docker-build]
     cmds:
       - |
-        if [ -f config/tempest_influx.yml ]; then
+        if [ -f config/tempest-influxdb.yml ]; then
           VOLUMES="-v $PWD/config:/config"
         fi
         docker run --rm --net=host ${VOLUMES:-} {{.IMAGE}}

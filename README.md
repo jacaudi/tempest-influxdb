@@ -2,8 +2,8 @@
 
 A high-performance weather data collector that receives UDP broadcasts from WeatherFlow Tempest weather stations and forwards the data to InfluxDB for storage and analysis.
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/jacaudi/tempest_influx?style=flat-square)](https://goreportcard.com/report/github.com/jacaudi/tempest_influx)
-[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/jacaudi/tempest_influx)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jacaudi/tempest-influxdb?style=flat-square)](https://goreportcard.com/report/github.com/jacaudi/tempest-influxdb)
+[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/jacaudi/tempest-influxdb)
 
 ## Features
 
@@ -32,7 +32,7 @@ The later is generated every few seconds and the former once a minute.
 
 There are three ways to pass configuration information:
 
-  1. A optional YAML configuration file may be provided in /config/tempest_influx.yml* which is read at startup.
+  1. A optional YAML configuration file may be provided in /config/tempest-influxdb.yml* which is read at startup.
   2. Environement variables as described in the table below.  These override configuration file data.
   3. Command line flags, also described in the table below.  These override configuration file adata and environment variables.
 
@@ -72,8 +72,8 @@ Following is a sample docker-compose file to run this container.
 version: "3"
 
 services:
-  tempest_influx:
-    image: "jchonig/tempest_influx:latest"
+  tempest-influxdb:
+    image: "jchonig/tempest-influxdb:latest"
     network_mode: host
     environment:
       TEMPEST_INFLUX_INFLUX_URL: "https://metrics.example.com:8086/api/v2/write"
@@ -106,10 +106,10 @@ This project uses a local module name (`tempest-influx`) for development. When r
 
 ```bash
 # Update module name in go.mod
-sed -i 's/module tempest-influx/module github.com\/jacaudi\/tempest_influx/' go.mod
+sed -i 's/module tempest-influx/module github.com\/jacaudi\/tempest-influxdb/' go.mod
 
 # Update import statements in all Go files
-find . -name "*.go" -exec sed -i 's|tempest-influx/internal/|github.com/jacaudi/tempest_influx/internal/|g' {} +
+find . -name "*.go" -exec sed -i 's|tempest-influx/internal/|github.com/jacaudi/tempest-influxdb/internal/|g' {} +
 
 # Clean up dependencies
 go mod tidy

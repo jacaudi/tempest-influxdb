@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"tempest_influx/internal/config"
+	"tempest-influxdb/internal/config"
 )
 
 func TestMainFunctionality(t *testing.T) {
@@ -31,7 +31,7 @@ func TestMainFunctionality(t *testing.T) {
 	}()
 
 	// Test that config can be loaded
-	cfg := config.Load(configDir, "tempest_influx")
+	cfg := config.Load(configDir, "tempest-influxdb")
 	if cfg == nil {
 		t.Fatal("Config loading failed")
 	}
@@ -154,7 +154,7 @@ func TestVersionOutput(t *testing.T) {
 
 func TestLogPrefixSetting(t *testing.T) {
 	// Test that log prefix can be set (simulating what happens in main)
-	expectedPrefix := "tempest_influx: "
+	expectedPrefix := "tempest-influxdb: "
 
 	// We can't easily test the actual log.SetPrefix call,
 	// but we can verify the string is correct
@@ -162,8 +162,8 @@ func TestLogPrefixSetting(t *testing.T) {
 		t.Errorf("Log prefix should end with ': ', got %s", expectedPrefix)
 	}
 
-	if !strings.HasPrefix(expectedPrefix, "tempest_influx") {
-		t.Errorf("Log prefix should start with 'tempest_influx', got %s", expectedPrefix)
+	if !strings.HasPrefix(expectedPrefix, "tempest-influxdb") {
+		t.Errorf("Log prefix should start with 'tempest-influxdb', got %s", expectedPrefix)
 	}
 }
 
@@ -192,7 +192,7 @@ func TestMainIntegration(t *testing.T) {
 	defer cancel()
 
 	// Load config
-	cfg := config.Load("/tmp", "tempest_influx")
+	cfg := config.Load("/tmp", "tempest-influxdb")
 	if cfg == nil {
 		t.Fatal("Failed to load config")
 	}
@@ -228,6 +228,6 @@ func BenchmarkConfigLoad(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		config.Load("/tmp", "tempest_influx")
+		config.Load("/tmp", "tempest-influxdb")
 	}
 }

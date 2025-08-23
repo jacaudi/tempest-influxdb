@@ -11,8 +11,8 @@ import (
 
 	"github.com/de-wax/go-pkg/dewpoint"
 
-	"tempest_influx/internal/config"
-	"tempest_influx/internal/influx"
+	"tempest-influxdb/internal/config"
+	"tempest-influxdb/internal/influx"
 )
 
 // Error constants for better error handling
