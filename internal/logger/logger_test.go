@@ -89,7 +89,7 @@ func TestNewLoggerJSONHandler(t *testing.T) {
 	output := buf.String()
 	
 	// Verify it's valid JSON
-	var jsonData map[string]interface{}
+	var jsonData map[string]any
 	if err := json.Unmarshal([]byte(output), &jsonData); err != nil {
 		t.Fatalf("Output is not valid JSON: %v\nOutput: %s", err, output)
 	}
@@ -175,7 +175,7 @@ func TestLoggerWithStructuredFields(t *testing.T) {
 
 	output := buf.String()
 	
-	var jsonData map[string]interface{}
+	var jsonData map[string]any
 	if err := json.Unmarshal([]byte(output), &jsonData); err != nil {
 		t.Fatalf("Output is not valid JSON: %v", err)
 	}

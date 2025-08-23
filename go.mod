@@ -2,6 +2,8 @@ module github.com/jacaudi/tempest_influx
 
 go 1.21
 
+replace github.com/jacaudi/tempest_influx => ./
+
 require (
 	github.com/de-wax/go-pkg/dewpoint v0.0.0-20220101175539-95c0f6ea9470
 	github.com/samber/lo v1.51.0
