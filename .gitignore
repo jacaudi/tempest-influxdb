@@ -44,7 +44,6 @@ ehthumbs.db
 Thumbs.db
 
 # Local configuration and secrets
-config/
 *.env
 .env.local
 .env.production
