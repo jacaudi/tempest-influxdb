@@ -108,7 +108,7 @@ func Load(path string, name string) *Config {
 	viper.SetConfigName(config_file)
 	viper.SetConfigType("yaml")
 
-	viper.SetEnvPrefix(name)
+	// Removed env prefix so INFLUX_TOKEN and INFLUX_BUCKET are read directly
 	viper.AutomaticEnv()
 
 	flag.Parse()
