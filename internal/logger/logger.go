@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"os"
 
-	"tempest_influx/internal/config"
+	"tempest-influx/internal/config"
 )
 
 // AppLogger wraps slog.Logger to provide structured logging

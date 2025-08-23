@@ -18,6 +18,11 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
+          
+      - name: Set Go workspace
+        run: |
+          echo "GOPATH=${{ github.workspace }}" >> $GITHUB_ENV
+          echo "GO111MODULE=on" >> $GITHUB_ENV
 
       - name: Cache Go modules
         uses: actions/cache@v4
@@ -29,10 +34,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
+      - name: Verify Go module
+        run: |
+          go version
+          go env GOMOD
+          go list -m
+          
       - name: Download dependencies
         run: |
           go mod download
           go mod tidy
+          go mod verify
 
       - name: Run tests
         run: go test -v ./...

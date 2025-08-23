@@ -11,10 +11,10 @@ import (
 
 	"github.com/samber/lo"
 
-	"tempest_influx/internal/config"
-	"tempest_influx/internal/influx"
-	"tempest_influx/internal/logger"
-	"tempest_influx/internal/tempest"
+	"tempest-influx/internal/config"
+	"tempest-influx/internal/influx"
+	"tempest-influx/internal/logger"
+	"tempest-influx/internal/tempest"
 )
 
 // Buffer pool for reusing byte buffers to reduce GC pressure

@@ -102,14 +102,14 @@ Core UDP packet processing code based on code in [udpproxy](https://github.com/A
 
 ## Development
 
-This project uses a local module name (`tempest_influx`) for development. When ready to publish as a Go module, update the `go.mod` file to use the full GitHub path:
+This project uses a local module name (`tempest-influx`) for development. When ready to publish as a Go module, update the `go.mod` file to use the full GitHub path:
 
 ```bash
 # Update module name in go.mod
-sed -i 's/module tempest_influx/module github.com\/jacaudi\/tempest_influx/' go.mod
+sed -i 's/module tempest-influx/module github.com\/jacaudi\/tempest_influx/' go.mod
 
 # Update import statements in all Go files
-find . -name "*.go" -exec sed -i 's|tempest_influx/internal/|github.com/jacaudi/tempest_influx/internal/|g' {} +
+find . -name "*.go" -exec sed -i 's|tempest-influx/internal/|github.com/jacaudi/tempest_influx/internal/|g' {} +
 
 # Clean up dependencies
 go mod tidy
