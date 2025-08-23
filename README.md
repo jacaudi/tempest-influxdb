@@ -2,10 +2,14 @@
 
 A high-performance weather data collector that receives UDP broadcasts from WeatherFlow Tempest weather stations and forwards the data to InfluxDB for storage and analysis.
 
+<div align="center">
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/jacaudi/tempest-influxdb?style=flat-square)](https://goreportcard.com/report/github.com/jacaudi/tempest-influxdb)
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/jacaudi/tempest-influxdb)
 [![Latest Release](https://img.shields.io/github/v/release/jacaudi/tempest-influxdb?style=flat-square)](https://github.com/jacaudi/tempest-influxdb/releases)
-[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg?style=flat-square)](https://renovatebot.com/)
+[![Renovate](https://img.shields.io/github/actions/workflow/status/jacaudi/tempest-influxdb/renovate.yml?style=flat-square&label=renovate)](https://github.com/jacaudi/tempest-influxdb/actions/workflows/renovate.yml)
+
+</div>
 
 ## Features
 
