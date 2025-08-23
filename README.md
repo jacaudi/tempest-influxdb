@@ -62,9 +62,8 @@ services:
 
 ## Credits
 
-Original Source Code and Ideas by [jchonig/tempest_influxdb](https://github.com/jchonig/tempest_influxdb)
-UDP processing based on [udpproxy](https://github.com/Akagi201/udpproxy)
-
+- Original code forked from [jchonig/tempest_influxdb](https://github.com/jchonig/tempest_influxdb)
+- UDP processing based on [udpproxy](https://github.com/Akagi201/udpproxy)
 
 ## License
 
