@@ -7,115 +7,65 @@ A high-performance weather data collector that receives UDP broadcasts from Weat
 
 ## Features
 
-- **UDP Listener**: Receives real-time weather data broadcasts from Tempest stations
-- **InfluxDB Integration**: Converts and forwards data using InfluxDB line protocol
-- **Structured Logging**: Uses Go's structured logging with configurable levels
-- **Performance Optimized**: Includes buffer pooling, optimized HTTP client, and efficient data parsing
-- **Configuration Flexible**: Supports YAML files, environment variables, and command-line flags
-- **Rapid Wind Support**: Optional high-frequency wind data collection
-- **Graceful Shutdown**: Proper signal handling for clean service termination
+- **UDP Listener**: Receives real-time weather data from [Tempest Weather System](https://shop.weatherflow.com/products/tempest) broadcasts
+- **InfluxDB Integration**: Forwards data using InfluxDB line protocol
+- **Performance Optimized**: Buffer pooling, optimized HTTP client, efficient parsing
+- **Flexible Configuration**: YAML files, environment variables, and CLI flags
+- **Optional Rapid Wind**: High-frequency wind data collection (every 3s)
+- **Graceful Shutdown**: Proper signal handling
 
-The [Tempest Weather System](https://shop.weatherflow.com/products/tempest) sends UDP broadcasts with weather data and system status periodically. This program receives those broadcasts and generates InfluxDB wire protocol messages to import the data into InfluxDB.
+Requires Docker host networking to receive UDP broadcasts.
 
-Docker host networking is required to receive the UDP broadcasts, unless some type of proxy is used.
+## Broadcast Formats
 
-## Tempest WX Broadcast Formats
-
-The format of the UDP broadcasts are documented
-[here](https://weatherflow.github.io/Tempest/api/udp.html).
-
-The reports of interest are the `obs_st` message which has full
-weather data and the `rapid_wind` has instantaneous Wind data.
-The later is generated every few seconds and the former once a minute.
+UDP broadcast formats are documented [here](https://weatherflow.github.io/Tempest/api/udp.html). Key messages:
+- `obs_st`: Full weather data (every minute)
+- `rapid_wind`: Instantaneous wind data (every few seconds)
 
 ## Configuration
 
-There are three ways to pass configuration information:
+Configuration priority: CLI flags > environment variables > YAML file (`/config/tempest-influxdb.yml`)
 
-  1. A optional YAML configuration file may be provided in /config/tempest-influxdb.yml* which is read at startup.
-  2. Environement variables as described in the table below.  These override configuration file data.
-  3. Command line flags, also described in the table below.  These override configuration file adata and environment variables.
-
-| Value                              | Config File              | Environment                             | Flag                       | Default                             |
-|------------------------------------|--------------------------|-----------------------------------------|----------------------------|-------------------------------------|
-| Read buffer size                   | buffer                   | TEMPEST_INFLUX_BUFFER                   | --buffer                   | 10240                               |
-| Listen Address                     | listen_address           | TEMPEST_INFLUX_LISTEN_ADDRESS           | --listen_address           | :50222                              |
-| InfluxDB write URL                 | influx_url               | TEMPEST_INFLUX_INFLUX_URL               | --influx_url               | https://localhost:8086/api/v2/write |
-| Influx authentication token        | influx_token             | TEMPEST_INFLUX_INFLUX_TOKEN             | --influx_token             |                                     |
-| Influx bucket                      | influx_bucket            | TEMPEST_INFLUX_INFLUX_BUCKET            | --influx_bucket            |                                     |
-| Influx bucket for rapid wind       | influx_bucket_rapid_wind | TEMPEST_INFLUX_INFLUX_BUCKET_RAPID_WIND | --influx_bucket_rapid_wind |                                     |
-| Verbose logging                    | verbose                  | TEMPEST_INFLUX_VERBOSE                  | -v, --verbose              | False (True if Debug set)           |
-| Debug logging                      | debug                    | TEMPEST_INFLUX_DEBUG                    | -d, --debug                | False                               |
-| Do not send packets                | noop                     | TEMPEST_INFLUX_NOOP                     | -n, --noop                 | False                               |
-| Send rapid wind reports (every 3s) | rapid_wind               | TEMPEST_RAPID_WIND                      | -rapid_wind                | False                               |
-
-Notes:
-
-   + *influx_token* is required by *InfluxDB* or *Telegraf* to authenticate requests.
-   + *influx_bucket* is not required if configured on the receiving end.
-
-## TODO
-
- + [ ] Hack around firmware_version being and int and string in
-       different packets
- + [ ] Optionally send `device_status` and `hub_status` data
-   + [ ] Allow specification of a bucket
-   + [ ] Structure config?
+| Value                              | Config File              | Environment        | Flag                       | Required | Default                 |
+|------------------------------------|--------------------------|--------------------|----------------------------|----------|-------------------------|
+| InfluxDB base URL                  | influx_url               | INFLUX_URL         | --influx_url               | Yes      | https://localhost:8086  |
+| InfluxDB organization              | influx_org               | INFLUX_ORG         | --influx_org               | Yes      | -                       |
+| Influx authentication token        | influx_token             | INFLUX_TOKEN       | --influx_token             | Yes      | -                       |
+| Influx bucket                      | influx_bucket            | INFLUX_BUCKET      | --influx_bucket            | Yes      | -                       |
+| Read buffer size                   | buffer                   | BUFFER             | --buffer                   | No       | 10240                   |
+| Listen Address                     | listen_address           | LISTEN_ADDRESS     | --listen_address           | No       | :50222                  |
+| InfluxDB API path                  | influx_api_path          | INFLUX_API_PATH    | --influx_api_path          | No       | /api/v2/write           |
+| Influx bucket for rapid wind       | influx_bucket_rapid_wind | INFLUX_BUCKET_RAPID_WIND | --influx_bucket_rapid_wind | No       | -                       |
+| Verbose logging                    | verbose                  | VERBOSE            | -v, --verbose              | No       | false (true if debug)   |
+| Debug logging                      | debug                    | DEBUG              | -d, --debug                | No       | false                   |
+| Raw UDP packet logging             | raw_udp                  | RAW_UDP            | --raw_udp                  | No       | false                   |
+| Do not send packets                | noop                     | NOOP               | -n, --noop                 | No       | false                   |
+| Send rapid wind reports (every 3s) | rapid_wind               | RAPID_WIND         | --rapid_wind               | No       | false                   |
 
 ## Examples
 
-### docker-compose.yml
-
-Following is a sample docker-compose file to run this container.
+### Docker Compose
 
 ```yaml
-version: "3"
-
 services:
   tempest-influxdb:
-    image: "jchonig/tempest-influxdb:latest"
+    image: "jacaudi/tempest-influxdb:latest"
     network_mode: host
     environment:
-      TEMPEST_INFLUX_INFLUX_URL: "https://metrics.example.com:8086/api/v2/write"
-      TEMPEST_INFLUX_INFLUX_TOKEN: "SOMEARBITRARYSTRING"
-      TEMPEST_INFLUX_INFLUX_BUCKET: "weather"
+      INFLUX_URL: "https://metrics.example.com"
+      INFLUX_TOKEN: "SOMEARBITRARYSTRING"
+      INFLUX_BUCKET: "weather"
+      INFLUX_ORG: "myorg"
     ports:
       - 50222/udp
 ```
 
-### Telegraf
-
-The output is designed to be passed to Telegraf for forwarding to
-InfluxDB via the influxdb_v2_listener, for example:
-
-```
-[[inputs.influxdb_v2_listener]]
-  service_address = ":8086"
-  tls_cert = "/etc/telegraf/keys/cert.pem"
-  tls_key = "/etc/telegraf/keys/key.pem"
-  token = "SOMEARBITRARYSTRING"
-```
-
 ## Credits
 
-Core UDP packet processing code based on code in [udpproxy](https://github.com/Akagi201/udpproxy)
+Original Source Code and Ideas by [jchonig/tempest_influxdb](https://github.com/jchonig/tempest_influxdb)
+UDP processing based on [udpproxy](https://github.com/Akagi201/udpproxy)
 
-## Development
-
-This project uses a local module name (`tempest-influx`) for development. When ready to publish as a Go module, update the `go.mod` file to use the full GitHub path:
-
-```bash
-# Update module name in go.mod
-sed -i 's/module tempest-influx/module github.com\/jacaudi\/tempest-influxdb/' go.mod
-
-# Update import statements in all Go files
-find . -name "*.go" -exec sed -i 's|tempest-influx/internal/|github.com/jacaudi/tempest-influxdb/internal/|g' {} +
-
-# Clean up dependencies
-go mod tidy
-```
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-# Trigger rebuild
+MIT License - see [LICENSE](LICENSE) file.
