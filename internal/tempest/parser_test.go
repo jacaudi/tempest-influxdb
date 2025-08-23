@@ -5,8 +5,8 @@ import (
 	"net"
 	"testing"
 
-	"tempest-influxdb/internal/config"
-	"tempest-influxdb/internal/influx"
+	"github.com/jacaudi/tempest-influxdb/internal/config"
+	"github.com/jacaudi/tempest-influxdb/internal/influx"
 )
 
 func TestPrecipType_String(t *testing.T) {

@@ -1,4 +1,4 @@
-module tempest-influxdb
+module github.com/jacaudi/tempest-influxdb
 
 go 1.21
 

@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"tempest-influxdb/internal/config"
+	"github.com/jacaudi/tempest-influxdb/internal/config"
 )
 
 func TestMainFunctionality(t *testing.T) {

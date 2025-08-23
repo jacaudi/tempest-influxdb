@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"tempest-influxdb/internal/config"
+	"github.com/jacaudi/tempest-influxdb/internal/config"
 )
 
 func TestNewLogger(t *testing.T) {
