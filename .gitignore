@@ -58,3 +58,9 @@ logs/
 
 # Task runner cache
 .task/
+
+# Claude AI
+.claude/
+
+# Temporary
+grafana/
