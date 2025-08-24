@@ -5,6 +5,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/**'
+      - '.github/actions/**'
+      - 'Dockerfile*'
 
 jobs:
   tests:
