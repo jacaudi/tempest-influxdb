@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
 
 vars:
@@ -9,8 +10,10 @@ vars:
 
 tasks:
   default:
-    desc: Default task - build the application
-    deps: [build]
+    desc: List available tasks
+    silent: true
+    cmds:
+      - task --list
 
   build:
     desc: Build the application
@@ -24,23 +27,23 @@ tasks:
       - mkdir -p {{.BUILD_DIR}}
       - go build -o {{.BUILD_DIR}}/{{.BINARY_NAME}} ./{{.CMD_DIR}}
 
-  build-all:
+  build:all:
     desc: Build for all platforms
-    deps: [build-linux, build-windows, build-darwin]
+    deps: [build:linux, build:windows, build:darwin]
 
-  build-linux:
+  build:linux:
     desc: Build for Linux
     cmds:
       - mkdir -p {{.BUILD_DIR}}
       - GOOS=linux GOARCH=amd64 go build -o {{.BUILD_DIR}}/{{.BINARY_NAME}}-linux-amd64 ./{{.CMD_DIR}}
 
-  build-windows:
+  build:windows:
     desc: Build for Windows
     cmds:
       - mkdir -p {{.BUILD_DIR}}
       - GOOS=windows GOARCH=amd64 go build -o {{.BUILD_DIR}}/{{.BINARY_NAME}}-windows-amd64.exe ./{{.CMD_DIR}}
 
-  build-darwin:
+  build:darwin:
     desc: Build for macOS
     cmds:
       - mkdir -p {{.BUILD_DIR}}
@@ -68,7 +71,7 @@ tasks:
     cmds:
       - go test -v ./...
 
-  test-coverage:
+  test:coverage:
     desc: Run tests with coverage
     cmds:
       - go test -cover ./...
@@ -110,7 +113,7 @@ tasks:
     cmds:
       - go mod tidy
 
-  deps-update:
+  deps:update:
     desc: Update dependencies
     cmds:
       - go get -u ./...
@@ -133,7 +136,7 @@ tasks:
           echo "gosec not installed. Install with: task tools"
         fi
 
-  vuln-check:
+  vuln:check:
     desc: Check for dependency vulnerabilities
     cmds:
       - |
@@ -143,14 +146,14 @@ tasks:
           echo "govulncheck not installed. Install with: task tools"
         fi
 
-  docker-build:
+  docker:build:
     desc: Build Docker image
     cmds:
       - docker build -t {{.IMAGE}} .
 
-  docker-run:
+  docker:run:
     desc: Run Docker container
-    deps: [docker-build]
+    deps: [docker:build]
     cmds:
       - |
         if [ -f config/tempest-influxdb.yml ]; then
@@ -166,11 +169,23 @@ tasks:
     desc: Run CI pipeline locally
     deps: [tidy, fmt, vet, test, lint, build]
 
-  all-checks:
+  all:checks:
     desc: Run comprehensive checks including security
-    deps: [check, security, vuln-check]
+    deps: [check, security, vuln:check]
 
-  help:
-    desc: Show available tasks
+  tag:
+    desc: Create and push a git tag (must start with 'v')
+    prompt: "Create and push tag {{.TAG}}?"
+    requires:
+      vars: ["TAG"]
+    preconditions:
+      - sh: echo "{{.TAG}}" | grep -qE "^v[0-9]+\.[0-9]+\.[0-9]+.*$"
+        msg: "Tag must start with 'v' and follow semver format (e.g., v1.0.0)"
+      - sh: '! git tag -l | grep -q "^{{.TAG}}$"'
+        msg: "Tag {{.TAG}} already exists"
     cmds:
-      - task --list
+      - echo "Creating tag {{.TAG}}"
+      - git tag {{.TAG}}
+      - echo "Pushing tag {{.TAG}}"
+      - git push origin {{.TAG}}
+      - echo "Tag {{.TAG}} created and pushed successfully!"
