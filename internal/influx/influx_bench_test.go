@@ -26,17 +26,17 @@ func BenchmarkInfluxDataMarshal(b *testing.B) {
 func BenchmarkInfluxDataMarshalLargeDataset(b *testing.B) {
 	m := New()
 	m.Name = "weather_detailed"
-	
+
 	// Add many tags
 	for i := 0; i < 10; i++ {
 		m.Tags[string(rune('a'+i))] = "value"
 	}
-	
+
 	// Add many fields
 	for i := 0; i < 20; i++ {
 		m.Fields[string(rune('A'+i))] = "123.45"
 	}
-	
+
 	m.Timestamp = 1640995200
 
 	b.ResetTimer()
